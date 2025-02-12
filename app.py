@@ -10,8 +10,10 @@ app = Flask(__name__)
 def home():
     fee = request.args.get('redemption_fee')
     lot_size = request.args.get('lot_size')
-    perc = request.args.get('perc') or 90
-    data = get_data(int(btc_precision * float(lot_size)), float(fee), int(perc))
+    perc = int(request.args.get('perc') or 50)
+    if fee is None or lot_size is None or perc not in [10, 25, 50]:
+        return jsonify({'error': 'Please provide redemption_fee and lot_size and perc 10, 25 or 50'})
+    data = get_data(int(btc_precision * float(lot_size)), float(fee), perc)
     return jsonify(data)
 
 if __name__ == '__main__':

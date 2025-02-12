@@ -14,7 +14,15 @@ def home():
     if fee is None or lot_size is None or perc not in [10, 25, 50]:
         return jsonify({'error': 'Please provide redemption_fee and lot_size and perc 10, 25 or 50'})
     data = get_data(int(btc_precision * float(lot_size)), float(fee), perc)
-    return jsonify(data)
+    if request.args.get('raw'):
+        return jsonify(data)
+    max_by_duration = sorted(data,key=lambda x: -x['duration_minutes'])[:10]
+    total_duration = sum(x['duration_minutes'] for x in data)
+    return jsonify({
+        "most_problematic_periods": max_by_duration,
+        "__n_total_periods": len(data),
+        "__average_problem_time": total_duration / 819480
+    })
 
 if __name__ == '__main__':
     # Run the Flask server on localhost and port 5000

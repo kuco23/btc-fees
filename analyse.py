@@ -31,3 +31,8 @@ def get_data(lot_size, redemption_fee, perc=90):
         last_block = block
 
     return data
+
+
+""" data = get_data(5e6, 0.01, 25)
+print(sorted(data,key=lambda x: -x['duration_minutes'])[0])
+print(sorted(data, key=lambda x: -x['n_blocks'])[0]) """
